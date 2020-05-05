@@ -1,0 +1,11 @@
+{
+  "name": "hacker-simulator",
+  "version": "0.0.1",
+  "main": "index.js",
+  "scripts": {
+    "start": "electron --enable-logging ."
+  },
+  "devDependencies": {
+    "electron": "8.2.5"
+  }
+}

@@ -1,0 +1,41 @@
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>Hello World!</title>
+	<!-- https://electronjs.org/docs/tutorial/security#csp-meta-tag -->
+	<meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+	<style>
+		body {
+			margin: 0;
+			padding: 0;
+			background: #000;
+			color: #FFF;
+		}
+
+		#terminal-input,
+		#terminal-input:focus {
+			background: none;
+			border: 0;
+			width: 80%;
+			outline: none;
+			cursor: pointer;
+		}
+
+		#loged-user,
+		#terminal-input {
+			color: #FFF;
+			font-size: 14px;
+		}
+	</style>
+	<script src="./terminal.js"></script>
+</head>
+
+<body>
+	<span id="logged-user">#</span>
+	<input id="terminal-input" type="text" autofocus="true" value="hack instagram neuberoliveirax" />
+	<div id="trick-output"></div>
+</body>
+
+
+</html>
