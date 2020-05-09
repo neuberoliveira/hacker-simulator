@@ -1,5 +1,6 @@
 const { app, screen, ipcMain } = require('electron')
 const store = require('./store')
+const parse = require('./parse-cmd')
 const terminalWindow = require('./windows/terminalWindow')
 const preparingTrick = require('./tricks/preparing')
 const bruteForceTrick = require('./tricks/brute-force')
@@ -17,6 +18,12 @@ app.whenReady().then(() => {
 
 
 	ipcMain.on('first-cmd', async (evt, cmd) => {
+		const cmdParsed = parse(cmd)
+		if (cmdParsed.args.length >= 2) {
+			store.hackTarget = cmdParsed.args[0]
+			store.hackProfile = cmdParsed.args[1]
+		}
+
 		playVideo('../assets/video/MI66opu41Ck.mp4', {
 			width: 356,
 			height: 200,
