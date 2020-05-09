@@ -1,0 +1,1 @@
+module.exports = (min, max) => min + Math.floor((max - min) * Math.random())

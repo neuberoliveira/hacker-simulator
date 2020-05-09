@@ -56,7 +56,7 @@ const mapPositionToCoordinate = (strPosition, win) => {
 	return { x: undefined, y: undefined }
 }
 
-module.exports = (imagepath, options = {}) => {
+module.exports = (imagepath, options = {}) => new Promise(resolve => {
 	if (!options) {
 		options = {}
 	}
@@ -84,4 +84,6 @@ module.exports = (imagepath, options = {}) => {
 			}, options.autoCloseDelay)
 		}
 	}, options.delay)
-}
+
+	resolve(win)
+})

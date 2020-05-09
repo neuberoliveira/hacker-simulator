@@ -1,7 +1,9 @@
 const { BrowserWindow, ipcMain } = require('electron')
 
-module.exports = (videopath, options) => {
+module.exports = (videopath, options) => new Promise(resolve => {
 	const { width, height, x, y, onEnd } = options
+	const isEndCallable = typeof onEnd == 'function'
+
 	const win = new BrowserWindow({
 		width,
 		height,
@@ -21,6 +23,8 @@ module.exports = (videopath, options) => {
 	win.once('ready-to-show', () => {
 		win.webContents.send('init-payload', {
 			file: videopath,
+			width,
+			height,
 		})
 	})
 
@@ -29,11 +33,10 @@ module.exports = (videopath, options) => {
 	})
 
 	ipcMain.once('video-end', () => {
-		if (typeof onEnd == 'function') {
+		if (isEndCallable) {
 			onEnd(win)
 		}
 	})
 
-
-	return win
-}
+	resolve(win)
+})

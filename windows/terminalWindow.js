@@ -19,33 +19,6 @@ const terminalWindow = () => {
 	return mainWindow
 }
 
-const sendTrick = (output) => {
-	mainWindow.webContents.send('trick-output', {
-		output,
-		type: 'default',
-		id: undefined,
-	})
-}
 
-const sendTrickln = (output) => {
-	mainWindow.webContents.send('trick-output', {
-		output: `${output}<br />`,
-		type: 'default',
-		id: undefined,
-	})
-}
 
-const sendLoader = (output, id) => {
-	mainWindow.webContents.send('trick-output', {
-		output,
-		type: 'loader',
-		id,
-	})
-}
-
-module.exports = {
-	terminalWindow,
-	sendLoader,
-	sendTrick,
-	sendTrickln,
-}
+module.exports = terminalWindow

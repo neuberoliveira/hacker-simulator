@@ -13,14 +13,16 @@
 	<script>
 		const { ipcRenderer } = require('electron')
 		let initialized = false
-		let videoFile
+		let initPayload
 		let videoTag
 		const init = () => {
-			if (videoTag && videoFile && !initialized) {
+			if (videoTag && initPayload && !initialized) {
 				initialized = true
 				videoTag.removeAttribute('controls');
+				videoTag.setAttribute('width', initPayload.width)
+				videoTag.setAttribute('height', initPayload.height)
 
-				videoTag.setAttribute('src', videoFile)
+				videoTag.setAttribute('src', initPayload.file)
 				videoTag.addEventListener('ended', () => ipcRenderer.send('video-end'))
 				videoTag.addEventListener('canplay', () => ipcRenderer.send('video-canplay'))
 
@@ -28,7 +30,7 @@
 		}
 
 		ipcRenderer.on('init-payload', (e, payload) => {
-			videoFile = payload.file
+			initPayload = payload
 			init()
 		})
 

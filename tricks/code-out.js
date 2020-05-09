@@ -1,5 +1,6 @@
 const { sendTrickln } = require('../windows/terminalWindow')
 
-module.exports = () => {
+module.exports = () => new Promise(resolve => {
 	sendTrickln('simple output')
-}
+	resolve()
+})
