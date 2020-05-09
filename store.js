@@ -1,9 +1,7 @@
-const { app, screen } = require('electron')
-const store = {}
-
-app.whenReady().then(() => {
-	store.screenWidth = screen.getPrimaryDisplay().workAreaSize.width
-	store.screenHeight = screen.getPrimaryDisplay().workAreaSize.height
-})
-
+const store = {
+	terminalRatio: {
+		w: 192,
+		h: 35,
+	}
+}
 module.exports = store

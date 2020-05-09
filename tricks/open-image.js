@@ -1,26 +1,68 @@
 const { BrowserWindow } = require('electron')
+const position = require('../position')
+const store = require('../store')
 
-const createWin = (imagepath, position, size, winOptions = {}) => {
-	win = new BrowserWindow({
-		width: size.width,
-		height: size.height,
-		// useContentSize: true,
+const createWin = (imagepath, options, winOptions = {}) => {
+	const { width, height, x, y, windowOptions } = options
+	const win = new BrowserWindow({
+		width,
+		height,
+		x,
+		y,
 		resizable: false,
 		minimizable: false,
-		// closable: false,
+		closable: false,
 		frame: false,
-		x: position.x,
-		y: position.y,
-
+		show: false,
 		...winOptions
 	})
 	win.loadFile(imagepath)
+	win.once('ready-to-show', () => {
+		win.show()
+	})
 	return win
 }
 
-module.exports = (imagepath, position, size, options = {}) => {
+const mapPositionToCoordinate = (strPosition, win) => {
+	let callFun
+	switch (strPosition) {
+		case 'top_left':
+			callFun = 'topLeft'
+			break;
+		case 'top_right':
+			callFun = 'topRight'
+			break;
+		case 'bottom_left':
+			callFun = 'bottomLeft'
+			break;
+		case 'bottom_right':
+			callFun = 'bottomRight'
+			break;
+		case 'center_left':
+			callFun = 'centerLeft'
+			break;
+		case 'center_right':
+			callFun = 'centerRight'
+			break;
+		case 'center':
+			callFun = 'center'
+			break;
+	}
+
+	if (position[callFun]) {
+		return position[callFun](win, store.screen)
+	}
+
+	return { x: undefined, y: undefined }
+}
+
+module.exports = (imagepath, options = {}) => {
 	if (!options) {
 		options = {}
+	}
+
+	if (!options.windowOptions) {
+		options.windowOptions = {}
 	}
 
 	if (!options.delay) {
@@ -28,7 +70,13 @@ module.exports = (imagepath, position, size, options = {}) => {
 	}
 
 	setTimeout(() => {
-		const win = createWin(imagepath, position, size, options.windowOptions)
+		const win = createWin(imagepath, options, options.windowOptions)
+		if (options.positionAbs) {
+			const coord = mapPositionToCoordinate(options.positionAbs, win)
+			console.log(options.positionAbs, coord)
+			win.setBounds(coord)
+		}
+
 		if (options.autoCloseDelay) {
 			setTimeout(() => {
 				win.close()

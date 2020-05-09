@@ -1,5 +1,5 @@
-const execTrick = () => {
-	return 'HAR!!!!'
-}
+const { sendTrickln } = require('../windows/terminalWindow')
 
-module.exports = execTrick
+module.exports = () => {
+	sendTrickln('simple output')
+}

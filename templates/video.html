@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+		}
+	</style>
+	<script>
+		const { ipcRenderer } = require('electron')
+		let initialized = false
+		let videoFile
+		let videoTag
+		const init = () => {
+			if (videoTag && videoFile && !initialized) {
+				initialized = true
+				videoTag.removeAttribute('controls');
+
+				videoTag.setAttribute('src', videoFile)
+				videoTag.addEventListener('ended', () => ipcRenderer.send('video-end'))
+				videoTag.addEventListener('canplay', () => ipcRenderer.send('video-canplay'))
+
+			}
+		}
+
+		ipcRenderer.on('init-payload', (e, payload) => {
+			videoFile = payload.file
+			init()
+		})
+
+		window.addEventListener("load", (event) => {
+			videoTag = document.getElementById('video')
+			init()
+		})
+
+
+	</script>
+</head>
+
+<body>
+	<video autoplay="true" controls id="video"></video>
+</body>
+
+</html>

@@ -1,23 +1,25 @@
-const { BrowserWindow, nativeImage } = require('electron')
+const { BrowserWindow } = require('electron')
+const { calcHeight } = require('../ratio-calculator')
 const store = require('../store')
 
 let mainWindow
-function terminalWindow() {
+const terminalWindow = () => {
 	mainWindow = new BrowserWindow({
-		width: store.screenWidth,
-		height: 350,
+		width: store.screen.width,
+		height: calcHeight(store.terminalRatio, store.screen.width),
 		x: 0,
 		y: 0,
 		webPreferences: {
 			nodeIntegration: true
 		}
 	})
-	mainWindow.webContents.openDevTools()
+
+	// mainWindow.webContents.openDevTools()
 	mainWindow.loadFile('./templates/terminal.html')
 	return mainWindow
 }
 
-function sendTrick(output) {
+const sendTrick = (output) => {
 	mainWindow.webContents.send('trick-output', {
 		output,
 		type: 'default',
@@ -25,7 +27,7 @@ function sendTrick(output) {
 	})
 }
 
-function sendTrickln(output) {
+const sendTrickln = (output) => {
 	mainWindow.webContents.send('trick-output', {
 		output: `${output}<br />`,
 		type: 'default',
@@ -33,7 +35,7 @@ function sendTrickln(output) {
 	})
 }
 
-function sendLoader(output, id) {
+const sendLoader = (output, id) => {
 	mainWindow.webContents.send('trick-output', {
 		output,
 		type: 'loader',
