@@ -16,7 +16,13 @@ const createWin = (imagepath, options, winOptions = {}) => {
 		show: false,
 		...winOptions
 	})
-	win.loadFile(imagepath)
+
+	if (/^https?:\/\//.test(imagepath)) {
+		win.loadURL(imagepath)
+	} else {
+		win.loadFile(imagepath)
+	}
+
 	win.once('ready-to-show', () => {
 		win.show()
 	})
@@ -83,7 +89,8 @@ module.exports = (imagepath, options = {}) => new Promise(resolve => {
 				win.destroy()
 			}, options.autoCloseDelay)
 		}
+
+		resolve(win)
 	}, options.delay)
 
-	resolve(win)
 })

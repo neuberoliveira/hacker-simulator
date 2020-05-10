@@ -1,4 +1,4 @@
-const { app, screen, ipcMain } = require('electron')
+const { app, screen, ipcMain, net } = require('electron')
 const store = require('./store')
 const parse = require('./parse-cmd')
 const terminalWindow = require('./windows/terminalWindow')
@@ -6,16 +6,15 @@ const preparingTrick = require('./tricks/preparing')
 const bruteForceTrick = require('./tricks/brute-force')
 const openImage = require('./tricks/open-image')
 const playVideo = require('./tricks/play-video')
+const { fetchInsta } = require('./tricks/social-media')
 
 app.whenReady().then(() => {
 	store.screen = {
 		width: screen.getPrimaryDisplay().workAreaSize.width,
 		height: screen.getPrimaryDisplay().workAreaSize.height
 	}
-
 	store.mainWindow = terminalWindow()
 	const mainWindowBounds = store.mainWindow.getBounds()
-
 
 	ipcMain.on('first-cmd', async (evt, cmd) => {
 		const cmdParsed = parse(cmd)
@@ -46,6 +45,12 @@ app.whenReady().then(() => {
 			onEnd: (win) => {
 				win.close()
 				win.destroy()
+
+				fetchInsta(store.hackProfile).then(images => {
+					openImage(images[0], { width: 320, height: 320, x: 600, y: 160 })
+					openImage(images[1], { width: 320, height: 320, x: 720, y: 280 })
+					openImage(images[2], { width: 320, height: 320, x: 840, y: 400 })
+				})
 
 				const imagePositionFactor = 60
 				const firstWinX = (store.screen.width - 600) - (imagePositionFactor * 2)
